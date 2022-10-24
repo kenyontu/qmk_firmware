@@ -7,12 +7,36 @@
 const uint16_t PROGMEM combo1[] = {KC_J, KC_K, COMBO_END};
 const uint16_t PROGMEM combo2[] = {KC_K, KC_L, COMBO_END};
 const uint16_t PROGMEM combo3[] = {KC_M, KC_COMM, COMBO_END};
-const uint16_t PROGMEM combo4[] = {KC_E, KC_R, COMBO_END};
+const uint16_t PROGMEM combo4[] = {KC_COMM, KC_DOT, COMBO_END};
+const uint16_t PROGMEM combo5[] = {KC_D, KC_F, COMBO_END};
 
 // Tap dance
 enum {
   TD_SHIFT__MOUSE_LAYER = 0 
 };
+
+// Leader key
+LEADER_EXTERNS();
+
+void matrix_scan_user(void) {
+  LEADER_DICTIONARY() {
+    leading = false;
+    leader_end();
+
+    // Keybinds for "The Way"
+    SEQ_ONE_KEY(KC_U) {
+      // Sends shift + left arrow key
+      // Deletes a snippet
+      SEND_STRING(SS_LSFT(SS_TAP(X_LEFT)));
+    }
+
+    SEQ_ONE_KEY(KC_I) {
+      // Sends shift + right arrow key
+      // Edit a snippet
+      SEND_STRING(SS_LSFT(SS_TAP(X_RIGHT)));
+    }
+  }
+}
 
 // Layers
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -37,7 +61,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_NO, KC_TILD, KC_LBRC, KC_RBRC, KC_CIRC,     KC_UNDS, KC_LT, KC_SLSH, KC_GT, KC_NO,
     KC_NO, KC_GRV, KC_LPRN, KC_RPRN, KC_DLR,       KC_EQL, KC_LCBR, KC_RCBR, KC_QUOT, KC_DQUO,
     KC_LGUI, KC_EXLM, KC_AT, KC_HASH, KC_PERC,     KC_AMPR, KC_BSLS, KC_PIPE, KC_NO, KC_NO,
-    MO(4), MO(5),                                  KC_TRNS, KC_TRNS
+    MO(4), KC_SPC,                                  KC_TRNS, KC_TRNS
   ),
 
   // Arrow keys layer 
@@ -58,10 +82,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   // Mouse keys and bootloader mode
   [5] = LAYOUT(
-    KC_NO, KC_NO, KC_WH_U, KC_NO, KC_NO,         KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
-    KC_NO, KC_WH_L, KC_WH_D, KC_WH_R, KC_NO,     KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, KC_NO,
-    QK_BOOT, KC_NO, KC_NO, KC_NO, KC_NO,         KC_NO, KC_ACL0, KC_ACL1, KC_ACL2, KC_NO,
-    KC_BTN2, KC_BTN1,                            TG(5), KC_NO
+    KC_NO, KC_ESC, KC_WH_U, KC_BTN3, KC_HOME,         KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
+    KC_NO, KC_WH_L, KC_WH_D, KC_WH_R, KC_END,     KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, KC_NO,
+    QK_BOOT, KC_NO, KC_NO, KC_NO, KC_NO,         KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
+    KC_BTN2, KC_BTN1,                            TG(5), KC_ACL2
   ),
 
   // Unused empty definition
@@ -80,6 +104,7 @@ combo_t key_combos[COMBO_COUNT] = {
   COMBO(combo2, KC_ENT),
   COMBO(combo3, KC_BSLS),
   COMBO(combo4, KC_CAPS),
+  COMBO(combo5, KC_LEAD)
 };
 
 // Tap dance definitions

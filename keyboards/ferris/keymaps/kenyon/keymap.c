@@ -3,40 +3,136 @@
 
 #include QMK_KEYBOARD_H
 
+// Custom keycodes
+enum my_keycodes {
+  // DWM
+  DWM_TERM = SAFE_RANGE, // Opens the terminal
+  DWM_SWAP, // Swaps windows
+  DWM_RUN, // Open menu to run programs
+  DWM_NEXT, // Move focus to the next window
+  DWM_PREV, // Move focus to the previous window
+  DWM_TAG_ONE, // Move to tag 1 
+  DWM_TAG_TWO, // Move to tag 2
+  DWM_TAG_THREE, // Move to tag 3
+
+  // Tmux
+  TMUX_NEXT, // Go to next tab
+  TMUX_NEW, // Create new tab
+  TMUX_SPLIT_H, // Horizontal split
+  TMUX_SPLIT_V, // Vertical split
+  TMUX_CYCLE_PANE, // Cycle between panes
+};
+
+/*
+* SEND_STRING modifiers
+*
+* X_<Basic key code> 
+* SS_LCTL - Left control
+* SS_LSFT - Left shift
+* SS_LALT - Left alt
+* SS_LGUI - Left GUI
+*/
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  switch (keycode) {
+    case DWM_TERM:
+      if (record->event.pressed) {
+        // Shift + Alt + Enter
+        SEND_STRING(SS_LSFT(SS_LGUI(SS_TAP(X_ENTER))));
+      }
+      return false; // Skip all further processing of this key
+
+    case DWM_SWAP:
+      if (record->event.pressed) {
+        // Alt + Enter
+        SEND_STRING(SS_LGUI(SS_TAP(X_ENTER)));
+      }
+      return false;
+
+    case DWM_RUN:
+      if (record->event.pressed) {
+        // Alt + p
+        SEND_STRING(SS_LGUI(SS_TAP(X_P)));
+      }
+      return false;
+
+    case DWM_NEXT:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LGUI(SS_TAP(X_J)));
+      }
+      return false;
+
+    case DWM_PREV:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LGUI(SS_TAP(X_K)));
+      }
+      return false;
+
+    case DWM_TAG_ONE:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LGUI(SS_TAP(X_1)));
+      }
+      return false;
+
+    case DWM_TAG_TWO:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LGUI(SS_TAP(X_2)));
+      }
+      return false;
+
+    case DWM_TAG_THREE:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LGUI(SS_TAP(X_3)));
+      }
+      return false;
+
+    case TMUX_NEW:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LCTL(SS_TAP(X_B)) "c");
+      }
+      return false;
+
+    case TMUX_NEXT:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LCTL(SS_TAP(X_B)) "n");
+      }
+      return false;
+
+    case TMUX_SPLIT_H:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LCTL(SS_TAP(X_B)) "%");
+      }
+      return false;
+
+    case TMUX_SPLIT_V:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LCTL(SS_TAP(X_B)) "\"");
+      }
+      return false;
+
+    case TMUX_CYCLE_PANE:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LCTL(SS_TAP(X_B)) "o");
+      }
+      return false;
+
+    default:
+      return true; // Process all other keycodes normally
+  }
+}
+
 // Combos
 const uint16_t PROGMEM combo1[] = {KC_J, KC_K, COMBO_END};
 const uint16_t PROGMEM combo2[] = {KC_K, KC_L, COMBO_END};
 const uint16_t PROGMEM combo3[] = {KC_M, KC_COMM, COMBO_END};
 const uint16_t PROGMEM combo4[] = {KC_COMM, KC_DOT, COMBO_END};
 const uint16_t PROGMEM combo5[] = {KC_D, KC_F, COMBO_END};
+const uint16_t PROGMEM combo6[] = {KC_C, KC_V, COMBO_END};
 
 // Tap dance
 enum {
   TD_SHIFT__MOUSE_LAYER = 0 
 };
-
-// Leader key
-LEADER_EXTERNS();
-
-void matrix_scan_user(void) {
-  LEADER_DICTIONARY() {
-    leading = false;
-    leader_end();
-
-    // Keybinds for "The Way"
-    SEQ_ONE_KEY(KC_U) {
-      // Sends shift + left arrow key
-      // Deletes a snippet
-      SEND_STRING(SS_LSFT(SS_TAP(X_LEFT)));
-    }
-
-    SEQ_ONE_KEY(KC_I) {
-      // Sends shift + right arrow key
-      // Edit a snippet
-      SEND_STRING(SS_LSFT(SS_TAP(X_RIGHT)));
-    }
-  }
-}
 
 // Layers
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -50,9 +146,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   // Numbers layer
   [1] = LAYOUT(
-    KC_PSLS, KC_PAST, KC_PMNS, KC_PPLS, KC_NO,    KC_NO, KC_7, KC_8, KC_9, KC_0,
+    KC_PSLS, KC_PAST, KC_PMNS, KC_PPLS, KC_NO,    KC_COMM, KC_7, KC_8, KC_9, KC_0,
     KC_NO, KC_LALT, KC_GRV, KC_TAB, KC_BSPC,      KC_PEQL, KC_4, KC_5, KC_6, KC_SCLN,
-    KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,            KC_NO, KC_1, KC_2, KC_3, KC_DOT,
+    KC_NO, TMUX_CYCLE_PANE, TMUX_NEW, TMUX_SPLIT_H, TMUX_SPLIT_V,       TMUX_NEXT, KC_1, KC_2, KC_3, KC_DOT,
     KC_TRNS, KC_SPC,                              MO(2), MO(3)
   ),
 
@@ -82,14 +178,31 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   // Mouse keys and bootloader mode
   [5] = LAYOUT(
-    KC_NO, KC_ESC, KC_WH_U, KC_BTN3, KC_HOME,         KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
+    KC_NO, KC_ESC, KC_WH_U, KC_BTN3, KC_HOME,     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
     KC_NO, KC_WH_L, KC_WH_D, KC_WH_R, KC_END,     KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, KC_NO,
-    QK_BOOT, KC_NO, KC_NO, KC_NO, KC_NO,         KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
-    KC_BTN2, KC_BTN1,                            TG(5), KC_ACL2
+    QK_BOOT, KC_NO, KC_NO, KC_NO, KC_NO,          KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
+    KC_BTN2, KC_BTN1,                             TG(5), KC_ACL2
+  ),
+
+//  DWM_TERM = SAFE_RANGE, // Opens the terminal
+//  DWM_SWAP = SAFE_RANGE, // Swaps windows
+//  DWM_RUN = SAFE_RANGE, // Open menu to run programs
+//  DWM_NEXT = SAFE_RANGE, // Move focus to the next window
+//  DWM_PREV = SAFE_RANGE, // Move focus to the previous window
+//  DWM_TAG_ONE = SAFE_RANGE, // Move to tag 1 
+//  DWM_TAG_TWO = SAFE_RANGE, // Move to tag 2
+//  DWM_TAG_THREE = SAFE_RANGE, // Move to tag 3
+
+  // Utils
+  [6] = LAYOUT(
+    KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,     KC_NO, DWM_TERM, KC_NO, DWM_RUN, KC_NO,
+    KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,     KC_NO, DWM_NEXT, DWM_PREV, DWM_SWAP, KC_NO,
+    KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,     KC_NO, DWM_TAG_ONE, DWM_TAG_TWO, DWM_TAG_THREE, KC_NO,
+    KC_NO, KC_NO,                          TG(6), KC_NO
   ),
 
   // Unused empty definition
-  [6] = LAYOUT(
+  [7] = LAYOUT(
     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
@@ -98,13 +211,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 };
 
+
 // Combo definitions
 combo_t key_combos[COMBO_COUNT] = {
   COMBO(combo1, KC_TAB),
   COMBO(combo2, KC_ENT),
   COMBO(combo3, KC_BSLS),
   COMBO(combo4, KC_CAPS),
-  COMBO(combo5, KC_LEAD)
+  COMBO(combo5, KC_LEAD),
+  COMBO(combo6, TG(6))
 };
 
 // Tap dance definitions

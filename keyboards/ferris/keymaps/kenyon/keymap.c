@@ -33,6 +33,11 @@ enum my_keycodes {
   TMUX_SPLIT_H, // Horizontal split
   TMUX_SPLIT_V, // Vertical split
   TMUX_CYCLE_PANE, // Cycle between panes
+
+  // Browser
+  WWW_OPEN_TAB,
+  WWW_NEXT_TAB,
+  WWW_PREV_TAB,
 };
 
 /*
@@ -189,6 +194,30 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
 
+    //////////////////////////////////////////////
+    // Browser
+    //////////////////////////////////////////////
+    case WWW_OPEN_TAB:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LCTL(SS_TAP(X_T)));
+        layer_off(5);
+      }
+      return false;
+
+    case WWW_NEXT_TAB:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LCTL(SS_TAP(X_TAB)));
+      }
+      return false;
+
+    case WWW_PREV_TAB:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LCTL(SS_LSFT(SS_TAP(X_TAB))));
+      }
+      return false;
+
+
+
     default:
       return true; // Process all other keycodes normally
   }
@@ -251,10 +280,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   // Mouse keys and bootloader mode
   [5] = LAYOUT(
-    KC_NO, KC_ESC, KC_WH_U, KC_BTN3, KC_HOME,     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
-    KC_NO, KC_WH_L, KC_WH_D, KC_WH_R, KC_END,     KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, KC_NO,
-    QK_BOOT, KC_NO, KC_NO, KC_NO, KC_NO,          KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
-    KC_BTN2, KC_BTN1,                             TG(5), KC_ACL2
+    KC_NO, KC_ESC, KC_WH_U, KC_NO, WWW_OPEN_TAB,  KC_NO, KC_BTN3, KC_HOME, KC_END, LCTL(KC_W),
+    KC_NO, KC_WH_L, KC_WH_D, KC_WH_R, KC_NO,      KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, KC_NO,
+    QK_BOOT, KC_ACL0, KC_ACL1, KC_ACL2, KC_NO,    KC_NO, WWW_PREV_TAB, WWW_NEXT_TAB, KC_NO, KC_NO,
+    TG(5), KC_ACL1,                               KC_BTN1, KC_BTN2
   ),
 
   // Utils + DWM

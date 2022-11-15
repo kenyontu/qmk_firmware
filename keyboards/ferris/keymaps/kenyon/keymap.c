@@ -298,9 +298,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   // Mouse keys and bootloader mode
   [5] = LAYOUT(
-    KC_NO, KC_ESC, KC_WH_U, KC_F5, WWW_OPEN_TAB,  KC_NO, KC_BTN3, KC_HOME, KC_END, LCTL(KC_W),
+    KC_NO, KC_ESC, KC_WH_U, KC_F5, WWW_OPEN_TAB,  LCTL(KC_T), KC_BTN3, KC_HOME, KC_END, LCTL(KC_W),
     KC_NO, KC_WH_L, KC_WH_D, KC_WH_R, KC_NO,      KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, KC_NO,
-    QK_BOOT, KC_ACL0, KC_ACL1, KC_ACL2, KC_NO,    KC_NO, WWW_PREV_TAB, WWW_NEXT_TAB, KC_NO, KC_NO,
+    QK_BOOT, KC_ACL0, KC_ACL1, KC_ACL2, KC_NO,    KC_NO, WWW_PREV_TAB, WWW_NEXT_TAB, KC_WBAK, KC_WFWD,
     TG(5), KC_ACL1,                               KC_BTN1, KC_BTN2
   ),
 

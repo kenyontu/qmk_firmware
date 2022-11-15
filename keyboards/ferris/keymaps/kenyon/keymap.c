@@ -105,6 +105,24 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
 
+    case DWM_TO_TAG_ONE:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LALT(SS_LSFT(SS_TAP(X_1))));
+      }
+      return false;
+
+    case DWM_TO_TAG_TWO:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LALT(SS_LSFT(SS_TAP(X_2))));
+      }
+      return false;
+
+    case DWM_TO_TAG_THREE:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LALT(SS_LSFT(SS_TAP(X_3))));
+      }
+      return false;
+
     case DWM_CLOSE:
       if (record->event.pressed) {
         SEND_STRING(SS_LSFT(SS_LALT(SS_TAP(X_C))));
@@ -291,14 +309,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     DWM_QUIT, DWM_SEND_NSCREEN, DWM_LAYOUT_BSTACK, DWM_LAYOUT_MONOCLE, DWM_LAYOUT_TILE,     KC_NO, DWM_TERM, KC_NO, DWM_RUN, DWM_CLOSE,
     KC_NO, DWM_TO_TAG_ONE, DWM_TO_TAG_TWO, DWM_TO_TAG_THREE, DWM_FOCUS_NSCREEN,     DWM_DECR_MSIZE, DWM_NEXT, DWM_PREV, DWM_INCR_MSIZE, DWM_SWAP,
     KC_NO, KC_NO, KC_C, KC_V, KC_NO,       KC_NO, DWM_TAG_ONE, DWM_TAG_TWO, DWM_TAG_THREE, KC_NO,
-    TG(6), KC_NO,                          KC_NO, KC_NO
+    TG(6), MO(7),                          KC_NO, KC_NO
   ),
 
-  // Unused empty definition
+  // DWM alternative layer 
   [7] = LAYOUT(
     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
-    KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
+    KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,     KC_NO, DWM_TO_TAG_ONE, DWM_TO_TAG_TWO, DWM_TO_TAG_THREE, KC_NO,
     KC_NO, KC_NO,                          KC_NO, KC_NO
   ),
 

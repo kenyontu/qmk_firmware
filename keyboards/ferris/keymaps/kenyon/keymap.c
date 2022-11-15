@@ -14,7 +14,19 @@ enum my_keycodes {
   DWM_TAG_ONE, // Move to tag 1 
   DWM_TAG_TWO, // Move to tag 2
   DWM_TAG_THREE, // Move to tag 3
-
+  DWM_TO_TAG_ONE, // Move focused window to tag 1
+  DWM_TO_TAG_TWO, // Move focused window to tag 2
+  DWM_TO_TAG_THREE, // Move focused window to tag 3
+  DWM_CLOSE, // Close current program
+  DWM_QUIT, // Quits DWM
+  DWM_INCR_MSIZE, // Increases master window size
+  DWM_DECR_MSIZE, // Decreases master window size
+  DWM_LAYOUT_TILE, // Swaps active layout to tile mode
+  DWM_LAYOUT_MONOCLE, // Swaps active layout to monocle (singe full screen window)
+  DWM_LAYOUT_BSTACK, // Swaps active layout to bottom stack
+  DWM_FOCUS_NSCREEN, // Focus next screen
+  DWM_SEND_NSCREEN, // Send focused window to the next screen
+ 
   // Tmux
   TMUX_NEXT, // Go to next tab
   TMUX_NEW, // Create new tab
@@ -35,57 +47,118 @@ enum my_keycodes {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
+    //////////////////////////////////////////////
+    // DWM
+    //////////////////////////////////////////////
     case DWM_TERM:
       if (record->event.pressed) {
-        // Shift + Alt + Enter
-        SEND_STRING(SS_LSFT(SS_LGUI(SS_TAP(X_ENTER))));
+        SEND_STRING(SS_LSFT(SS_LALT(SS_TAP(X_ENTER))));
+        layer_off(6); 
       }
       return false; // Skip all further processing of this key
 
     case DWM_SWAP:
       if (record->event.pressed) {
-        // Alt + Enter
-        SEND_STRING(SS_LGUI(SS_TAP(X_ENTER)));
+        SEND_STRING(SS_LALT(SS_TAP(X_ENTER)));
       }
       return false;
 
     case DWM_RUN:
       if (record->event.pressed) {
-        // Alt + p
-        SEND_STRING(SS_LGUI(SS_TAP(X_P)));
+        SEND_STRING(SS_LALT(SS_TAP(X_P)));
+        layer_off(6); 
       }
       return false;
 
     case DWM_NEXT:
       if (record->event.pressed) {
-        SEND_STRING(SS_LGUI(SS_TAP(X_J)));
+        SEND_STRING(SS_LALT(SS_TAP(X_J)));
       }
       return false;
 
     case DWM_PREV:
       if (record->event.pressed) {
-        SEND_STRING(SS_LGUI(SS_TAP(X_K)));
+        SEND_STRING(SS_LALT(SS_TAP(X_K)));
       }
       return false;
 
     case DWM_TAG_ONE:
       if (record->event.pressed) {
-        SEND_STRING(SS_LGUI(SS_TAP(X_1)));
+        SEND_STRING(SS_LALT(SS_TAP(X_1)));
       }
       return false;
 
     case DWM_TAG_TWO:
       if (record->event.pressed) {
-        SEND_STRING(SS_LGUI(SS_TAP(X_2)));
+        SEND_STRING(SS_LALT(SS_TAP(X_2)));
       }
       return false;
 
     case DWM_TAG_THREE:
       if (record->event.pressed) {
-        SEND_STRING(SS_LGUI(SS_TAP(X_3)));
+        SEND_STRING(SS_LALT(SS_TAP(X_3)));
       }
       return false;
 
+    case DWM_CLOSE:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LSFT(SS_LALT(SS_TAP(X_C))));
+      }
+      return false;
+    
+    case DWM_QUIT:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LSFT(SS_LALT(SS_TAP(X_Q))));
+        layer_off(6);
+      }
+      return false;
+
+    case DWM_INCR_MSIZE:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LALT(SS_TAP(X_L)));
+      }
+      return false;
+    
+    case DWM_DECR_MSIZE:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LALT(SS_TAP(X_H)));
+      }
+      return false;
+
+    case DWM_LAYOUT_TILE:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LALT(SS_TAP(X_T)));
+      }
+      return false;
+      
+    case DWM_LAYOUT_MONOCLE:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LALT(SS_TAP(X_M)));
+      }
+      return false;
+
+    case DWM_LAYOUT_BSTACK:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LALT(SS_TAP(X_U)));
+      }
+      return false;
+
+    case DWM_FOCUS_NSCREEN:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LALT(SS_TAP(X_DOT)));
+      }
+      return false;
+
+    case DWM_SEND_NSCREEN:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LSFT(SS_LALT(SS_TAP(X_DOT))));
+      }
+      return false;
+
+
+    //////////////////////////////////////////////
+    // TMUX
+    //////////////////////////////////////////////
     case TMUX_NEW:
       if (record->event.pressed) {
         SEND_STRING(SS_LCTL(SS_TAP(X_B)) "c");
@@ -184,21 +257,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_BTN2, KC_BTN1,                             TG(5), KC_ACL2
   ),
 
-//  DWM_TERM = SAFE_RANGE, // Opens the terminal
-//  DWM_SWAP = SAFE_RANGE, // Swaps windows
-//  DWM_RUN = SAFE_RANGE, // Open menu to run programs
-//  DWM_NEXT = SAFE_RANGE, // Move focus to the next window
-//  DWM_PREV = SAFE_RANGE, // Move focus to the previous window
-//  DWM_TAG_ONE = SAFE_RANGE, // Move to tag 1 
-//  DWM_TAG_TWO = SAFE_RANGE, // Move to tag 2
-//  DWM_TAG_THREE = SAFE_RANGE, // Move to tag 3
-
-  // Utils
+  // Utils + DWM
   [6] = LAYOUT(
-    KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,     KC_NO, DWM_TERM, KC_NO, DWM_RUN, KC_NO,
-    KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,     KC_NO, DWM_NEXT, DWM_PREV, DWM_SWAP, KC_NO,
-    KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,     KC_NO, DWM_TAG_ONE, DWM_TAG_TWO, DWM_TAG_THREE, KC_NO,
-    KC_NO, KC_NO,                          TG(6), KC_NO
+    DWM_QUIT, DWM_SEND_NSCREEN, DWM_LAYOUT_BSTACK, DWM_LAYOUT_MONOCLE, DWM_LAYOUT_TILE,     KC_NO, DWM_TERM, KC_NO, DWM_RUN, DWM_CLOSE,
+    KC_NO, DWM_TO_TAG_ONE, DWM_TO_TAG_TWO, DWM_TO_TAG_THREE, DWM_FOCUS_NSCREEN,     DWM_DECR_MSIZE, DWM_NEXT, DWM_PREV, DWM_INCR_MSIZE, DWM_SWAP,
+    KC_NO, KC_NO, KC_C, KC_V, KC_NO,       KC_NO, DWM_TAG_ONE, DWM_TAG_TWO, DWM_TAG_THREE, KC_NO,
+    TG(6), KC_NO,                          KC_NO, KC_NO
   ),
 
   // Unused empty definition
@@ -209,10 +273,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_NO, KC_NO,                          KC_NO, KC_NO
   ),
 
+  // Unused empty definition
+  [8] = LAYOUT(
+    KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
+    KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
+    KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
+    KC_NO, KC_NO,                          KC_NO, KC_NO
+  ),
+
 };
 
-
-// Combo definitions
+// Combo definition
 combo_t key_combos[COMBO_COUNT] = {
   COMBO(combo1, KC_TAB),
   COMBO(combo2, KC_ENT),

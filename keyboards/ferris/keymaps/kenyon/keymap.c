@@ -2,6 +2,7 @@
 // This is the canonical layout file for the Quantum project. If you want to add another keyboard,
 
 #include QMK_KEYBOARD_H
+#include "keymap_us_international_linux.h"
 
 // Custom keycodes
 enum my_keycodes {
@@ -266,7 +267,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   // Numbers layer
   [1] = LAYOUT(
-    KC_PSLS, KC_PAST, KC_PMNS, KC_PPLS, KC_NO,    KC_COMM, KC_7, KC_8, KC_9, KC_0,
+    KC_PSLS, KC_PAST, KC_PMNS, KC_PPLS, KC_COMM,    KC_COMM, KC_7, KC_8, KC_9, KC_0,
     KC_NO, KC_LALT, KC_GRV, KC_TAB, KC_BSPC,      KC_PEQL, KC_4, KC_5, KC_6, KC_SCLN,
     KC_NO, TMUX_CYCLE_PANE, TMUX_NEW, TMUX_SPLIT_H, TMUX_SPLIT_V,       TMUX_NEXT, KC_1, KC_2, KC_3, KC_DOT,
     KC_TRNS, KC_SPC,                              MO(2), MO(3)
@@ -275,7 +276,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // Special characters layer
   [2] = LAYOUT(
     S(KC_RGHT), KC_TILD, KC_LBRC, KC_RBRC, KC_CIRC,     KC_UNDS, KC_LT, KC_SLSH, KC_GT, KC_DEL,
-    KC_NO, KC_GRV, KC_LPRN, KC_RPRN, KC_DLR,       KC_EQL, KC_LCBR, KC_RCBR, KC_QUOT, KC_DQUO,
+    S(KC_LEFT), KC_GRV, KC_LPRN, KC_RPRN, KC_DLR,       KC_EQL, KC_LCBR, KC_RCBR, KC_QUOT, KC_DQUO,
     KC_LGUI, KC_EXLM, KC_AT, KC_HASH, KC_PERC,     KC_AMPR, KC_BSLS, KC_PIPE, KC_NO, KC_NO,
     MO(4), KC_SPC,                                  KC_TRNS, KC_TRNS
   ),
@@ -283,7 +284,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // Arrow keys layer 
   [3] = LAYOUT(
     KC_NO, KC_NO, KC_PGUP, KC_PGDN, KC_NO,     KC_NO, KC_HOME, KC_END, KC_NO, KC_NO,
-    KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,         KC_LEFT, KC_DOWN, KC_UP, KC_RGHT, KC_NO,
+    KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,         KC_LEFT, KC_DOWN, KC_UP, KC_RGHT, US_CCED,
     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,         KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
     KC_LSFT, KC_LCTL,                          KC_NO, KC_TRNS 
   ),
@@ -306,7 +307,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   // Utils + DWM
   [6] = LAYOUT(
-    DWM_QUIT, DWM_SEND_NSCREEN, DWM_LAYOUT_BSTACK, DWM_LAYOUT_MONOCLE, DWM_LAYOUT_TILE,     KC_NO, DWM_TERM, KC_NO, DWM_RUN, DWM_CLOSE,
+    KC_NO, DWM_SEND_NSCREEN, DWM_LAYOUT_BSTACK, DWM_LAYOUT_MONOCLE, DWM_LAYOUT_TILE,     KC_NO, DWM_TERM, KC_NO, DWM_RUN, DWM_CLOSE,
     KC_NO, DWM_TO_TAG_ONE, DWM_TO_TAG_TWO, DWM_TO_TAG_THREE, DWM_FOCUS_NSCREEN,     DWM_DECR_MSIZE, DWM_NEXT, DWM_PREV, DWM_INCR_MSIZE, DWM_SWAP,
     KC_NO, KC_NO, KC_C, KC_V, KC_NO,       KC_NO, DWM_TAG_ONE, DWM_TAG_TWO, DWM_TAG_THREE, KC_NO,
     TG(6), MO(7),                          KC_NO, KC_NO
@@ -314,7 +315,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   // DWM alternative layer 
   [7] = LAYOUT(
-    KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
+    DWM_QUIT, KC_NO, KC_NO, KC_NO, KC_NO,     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,     KC_NO, DWM_TO_TAG_ONE, DWM_TO_TAG_TWO, DWM_TO_TAG_THREE, KC_NO,
     KC_NO, KC_NO,                          KC_NO, KC_NO
@@ -326,8 +327,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
     KC_NO, KC_NO,                          KC_NO, KC_NO
-  ),
-
+  )
 };
 
 // Combo definition

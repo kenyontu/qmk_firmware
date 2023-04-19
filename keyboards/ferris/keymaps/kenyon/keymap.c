@@ -235,20 +235,28 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
 
-
-
     default:
       return true; // Process all other keycodes normally
   }
 }
 
-// Combos
+// Combos for QWERTY
 const uint16_t PROGMEM combo1[] = {KC_J, KC_K, COMBO_END};
 const uint16_t PROGMEM combo2[] = {KC_K, KC_L, COMBO_END};
 const uint16_t PROGMEM combo3[] = {KC_M, KC_COMM, COMBO_END};
 const uint16_t PROGMEM combo4[] = {KC_COMM, KC_DOT, COMBO_END};
 const uint16_t PROGMEM combo5[] = {KC_D, KC_F, COMBO_END};
 const uint16_t PROGMEM combo6[] = {KC_C, KC_V, COMBO_END};
+const uint16_t PROGMEM combo7[] = {KC_H, KC_J, COMBO_END};
+
+// Combos for Colemak-DH
+const uint16_t PROGMEM combo8[] = {KC_N, KC_E, COMBO_END};
+const uint16_t PROGMEM combo9[] = {KC_E, KC_I, COMBO_END};
+const uint16_t PROGMEM combo10[] = {KC_H, KC_COMM, COMBO_END};
+const uint16_t PROGMEM combo11[] = {KC_S, KC_T, COMBO_END};
+const uint16_t PROGMEM combo12[] = {KC_C, KC_D, COMBO_END};
+const uint16_t PROGMEM combo13[] = {KC_M, KC_N, COMBO_END};
+
 
 // Tap dance
 enum {
@@ -257,32 +265,40 @@ enum {
 
 // Layers
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-  // Base layer 
+  // Base layer QWERTY
   [0] = LAYOUT(
     KC_Q, KC_W, KC_E, KC_R, KC_T,     KC_Y, KC_U, KC_I, KC_O, KC_P,
     KC_A, KC_S, KC_D, KC_F, KC_G,     KC_H, KC_J, KC_K, KC_L, KC_SCLN,
     KC_Z, KC_X, KC_C, KC_V, KC_B,     KC_N, KC_M, KC_COMM, KC_DOT, KC_SLSH,
-    LT(1, KC_ESC), LCTL_T(KC_SPC),    TD(TD_SHIFT__MOUSE_LAYER), MO(2)
+    LT(2, KC_ESC), LCTL_T(KC_SPC),    TD(TD_SHIFT__MOUSE_LAYER), MO(3)
+  ),
+
+  // Base layer Colemak-DH
+  [1] = LAYOUT(
+    KC_Q, KC_W, KC_F, KC_P, KC_B,     KC_J, KC_L, KC_U, KC_Y, KC_SCLN,
+    KC_A, KC_R, KC_S, KC_T, KC_G,     KC_M, KC_N, KC_E, KC_I, KC_O,
+    KC_Z, KC_X, KC_C, KC_D, KC_V,     KC_K, KC_H, KC_COMM, KC_DOT, KC_SLSH,
+    LT(2, KC_ESC), LCTL_T(KC_SPC),    TD(TD_SHIFT__MOUSE_LAYER), MO(3)
   ),
 
   // Numbers layer
-  [1] = LAYOUT(
-    KC_PSLS, KC_PAST, KC_PMNS, KC_PPLS, KC_COMM,    KC_COMM, KC_7, KC_8, KC_9, KC_0,
-    KC_NO, KC_LALT, KC_GRV, KC_TAB, KC_BSPC,      KC_PEQL, KC_4, KC_5, KC_6, KC_SCLN,
+  [2] = LAYOUT(
+    KC_PSLS, KC_PAST, KC_PMNS, KC_PPLS, KC_COMM,     KC_COMM, KC_7, KC_8, KC_9, KC_0,
+    KC_LALT, KC_GRV, KC_TAB, KC_LCTL,  KC_BSPC,      KC_PEQL, KC_4, KC_5, KC_6, KC_SCLN,
     KC_NO, TMUX_CYCLE_PANE, TMUX_NEW, TMUX_SPLIT_H, TMUX_SPLIT_V,       TMUX_NEXT, KC_1, KC_2, KC_3, KC_DOT,
-    KC_TRNS, KC_SPC,                              MO(2), MO(3)
+    KC_TRNS, KC_SPC,                                 MO(3), MO(4)
   ),
 
   // Special characters layer
-  [2] = LAYOUT(
+  [3] = LAYOUT(
     S(KC_RGHT), KC_TILD, KC_LBRC, KC_RBRC, KC_CIRC,     KC_UNDS, KC_LT, KC_SLSH, KC_GT, KC_DEL,
     S(KC_LEFT), KC_GRV, KC_LPRN, KC_RPRN, KC_DLR,       KC_EQL, KC_LCBR, KC_RCBR, KC_QUOT, KC_DQUO,
-    KC_LGUI, KC_EXLM, KC_AT, KC_HASH, KC_PERC,     KC_AMPR, KC_BSLS, KC_PIPE, KC_NO, KC_NO,
-    MO(4), KC_SPC,                                  KC_TRNS, KC_TRNS
+    KC_LGUI, KC_EXLM, KC_AT, KC_HASH, KC_PERC,          KC_AMPR, KC_BSLS, KC_PIPE, KC_NO, KC_NO,
+    MO(5), KC_SPC,                                      KC_TRNS, KC_TRNS
   ),
 
   // Arrow keys layer 
-  [3] = LAYOUT(
+  [4] = LAYOUT(
     KC_NO, KC_NO, KC_PGUP, KC_PGDN, KC_NO,     KC_NO, KC_HOME, KC_END, KC_NO, KC_NO,
     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,         KC_LEFT, KC_DOWN, KC_UP, KC_RGHT, US_CCED,
     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,         KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
@@ -290,39 +306,39 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   // Media and F1 ~ F12 keys 
-  [4] = LAYOUT(
-    KC_NO, KC_VOLD, KC_MUTE, KC_VOLU, KC_NO,     KC_NO, KC_F9, KC_F10, KC_F11, KC_F12,
-    KC_NO, KC_MPRV, KC_MPLY, KC_MNXT, KC_NO,     KC_NO, KC_F5, KC_F6, KC_F7, KC_F8,
+  [5] = LAYOUT(
+    DF(0), KC_VOLD, KC_MUTE, KC_VOLU, KC_NO,     KC_NO, KC_F9, KC_F10, KC_F11, KC_F12,
+    DF(1), KC_MPRV, KC_MPLY, KC_MNXT, KC_NO,     KC_NO, KC_F5, KC_F6, KC_F7, KC_F8,
     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,           KC_NO, KC_F1, KC_F2, KC_F3, KC_F4,
     KC_TRNS, KC_NO,                              KC_NO, KC_NO 
   ),
 
   // Mouse keys and bootloader mode
-  [5] = LAYOUT(
+  [6] = LAYOUT(
     KC_NO, KC_ESC, KC_WH_U, KC_F5, WWW_OPEN_TAB,        LCTL(KC_T), KC_BTN3, KC_HOME, KC_END, LCTL(KC_W),
     KC_NO, KC_WH_L, KC_WH_D, KC_WH_R, KC_NO,            KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, KC_NO,
     QK_BOOT, KC_NO, LCTL(KC_C), LCTL(KC_V), KC_ACL2,    KC_NO, WWW_PREV_TAB, WWW_NEXT_TAB, KC_WBAK, KC_WFWD,
-    TG(5), KC_ACL1,                                     KC_BTN1, KC_BTN2
+    TG(6), KC_ACL1,                                     KC_BTN1, KC_BTN2
   ),
 
   // Utils + DWM
-  [6] = LAYOUT(
+  [7] = LAYOUT(
     KC_NO, DWM_SEND_NSCREEN, DWM_LAYOUT_BSTACK, DWM_LAYOUT_MONOCLE, DWM_LAYOUT_TILE,     KC_NO, DWM_TERM, KC_NO, DWM_RUN, DWM_CLOSE,
     KC_NO, DWM_TO_TAG_ONE, DWM_TO_TAG_TWO, DWM_TO_TAG_THREE, DWM_FOCUS_NSCREEN,     DWM_DECR_MSIZE, DWM_NEXT, DWM_PREV, DWM_INCR_MSIZE, DWM_SWAP,
     KC_NO, KC_NO, KC_C, KC_V, KC_NO,       KC_NO, DWM_TAG_ONE, DWM_TAG_TWO, DWM_TAG_THREE, KC_NO,
-    TG(6), MO(7),                          KC_NO, KC_NO
+    TG(7), MO(8),                          KC_NO, KC_NO
   ),
 
   // DWM alternative layer 
-  [7] = LAYOUT(
+  [8] = LAYOUT(
     DWM_QUIT, KC_NO, KC_NO, KC_NO, KC_NO,     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
-    KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
-    KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,     KC_NO, DWM_TO_TAG_ONE, DWM_TO_TAG_TWO, DWM_TO_TAG_THREE, KC_NO,
-    KC_NO, KC_NO,                          KC_NO, KC_NO
+    KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,        KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
+    KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,        KC_NO, DWM_TO_TAG_ONE, DWM_TO_TAG_TWO, DWM_TO_TAG_THREE, KC_NO,
+    KC_NO, KC_NO,                             KC_NO, KC_NO
   ),
 
   // Unused empty definition
-  [8] = LAYOUT(
+  [9] = LAYOUT(
     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
@@ -337,11 +353,19 @@ combo_t key_combos[COMBO_COUNT] = {
   COMBO(combo3, KC_BSLS),
   COMBO(combo4, KC_CAPS),
   COMBO(combo5, KC_LEAD),
-  COMBO(combo6, TG(6))
+  COMBO(combo6, TG(7)),
+  COMBO(combo7,	KC_BSPC),
+  COMBO(combo8, KC_TAB),
+  COMBO(combo9, KC_ENT),
+  COMBO(combo10, KC_BSLS),
+  COMBO(combo11, KC_LEAD),
+  COMBO(combo12, TG(7)),
+  COMBO(combo13,	KC_BSPC),
 };
+
 
 // Tap dance definitions
 qk_tap_dance_action_t tap_dance_actions[] = {
   // Single tap: Shift | Double tap: Toggle layer 5
-  [TD_SHIFT__MOUSE_LAYER] = ACTION_TAP_DANCE_LAYER_TOGGLE(KC_LSFT, 5)
+  [TD_SHIFT__MOUSE_LAYER] = ACTION_TAP_DANCE_LAYER_TOGGLE(KC_LSFT, 6)
 };

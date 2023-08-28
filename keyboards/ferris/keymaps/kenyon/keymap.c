@@ -12,7 +12,7 @@ enum my_keycodes {
   DWM_RUN, // Open menu to run programs
   DWM_NEXT, // Move focus to the next window
   DWM_PREV, // Move focus to the previous window
-  DWM_TAG_ONE, // Move to tag 1 
+  DWM_TAG_ONE, // Move to tag 1
   DWM_TAG_TWO, // Move to tag 2
   DWM_TAG_THREE, // Move to tag 3
   DWM_TO_TAG_ONE, // Move focused window to tag 1
@@ -27,13 +27,21 @@ enum my_keycodes {
   DWM_LAYOUT_BSTACK, // Swaps active layout to bottom stack
   DWM_FOCUS_NSCREEN, // Focus next screen
   DWM_SEND_NSCREEN, // Send focused window to the next screen
- 
+
   // Tmux
-  TMUX_NEXT, // Go to next tab
-  TMUX_NEW, // Create new tab
+  TMUX_PREV_WIN, // Go to prev window
+  TMUX_NEXT_WIN, // Go to next window
+  TMUX_NEW, // Create new window
   TMUX_SPLIT_H, // Horizontal split
   TMUX_SPLIT_V, // Vertical split
-  TMUX_CYCLE_PANE, // Cycle between panes
+  TMUX_PANE_UP, // Cycle between panes
+  TMUX_PANE_RIGHT, // Cycle between panes
+  TMUX_PANE_DOWN, // Cycle between panes
+  TMUX_PANE_LEFT, // Cycle between panes
+  TMUX_RESIZE_UP, // Resize pane up
+  TMUX_RESIZE_RIGHT, // Resize pane right
+  TMUX_RESIZE_DOWN, // Resize pane down
+  TMUX_RESIZE_LEFT, // Resize pane left
 
   // Browser
   WWW_OPEN_TAB,
@@ -44,7 +52,7 @@ enum my_keycodes {
 /*
 * SEND_STRING modifiers
 *
-* X_<Basic key code> 
+* X_<Basic key code>
 * SS_LCTL - Left control
 * SS_LSFT - Left shift
 * SS_LALT - Left alt
@@ -59,7 +67,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case DWM_TERM:
       if (record->event.pressed) {
         SEND_STRING(SS_LSFT(SS_LALT(SS_TAP(X_ENTER))));
-        layer_off(6); 
+        layer_off(6);
       }
       return false; // Skip all further processing of this key
 
@@ -72,7 +80,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case DWM_RUN:
       if (record->event.pressed) {
         SEND_STRING(SS_LALT(SS_TAP(X_P)));
-        layer_off(6); 
+        layer_off(6);
       }
       return false;
 
@@ -129,7 +137,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         SEND_STRING(SS_LSFT(SS_LALT(SS_TAP(X_C))));
       }
       return false;
-    
+
     case DWM_QUIT:
       if (record->event.pressed) {
         SEND_STRING(SS_LSFT(SS_LALT(SS_TAP(X_Q))));
@@ -142,7 +150,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         SEND_STRING(SS_LALT(SS_TAP(X_L)));
       }
       return false;
-    
+
     case DWM_DECR_MSIZE:
       if (record->event.pressed) {
         SEND_STRING(SS_LALT(SS_TAP(X_H)));
@@ -154,7 +162,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         SEND_STRING(SS_LALT(SS_TAP(X_T)));
       }
       return false;
-      
+
     case DWM_LAYOUT_MONOCLE:
       if (record->event.pressed) {
         SEND_STRING(SS_LALT(SS_TAP(X_M)));
@@ -189,9 +197,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
 
-    case TMUX_NEXT:
+    case TMUX_NEXT_WIN:
       if (record->event.pressed) {
         SEND_STRING(SS_LCTL(SS_TAP(X_B)) "n");
+      }
+      return false;
+
+    case TMUX_PREV_WIN:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LCTL(SS_TAP(X_B)) "p");
       }
       return false;
 
@@ -207,9 +221,51 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
 
-    case TMUX_CYCLE_PANE:
+    case TMUX_PANE_UP:
       if (record->event.pressed) {
-        SEND_STRING(SS_LCTL(SS_TAP(X_B)) "o");
+        SEND_STRING(SS_LCTL(SS_TAP(X_B)) SS_TAP(X_UP));
+      }
+      return false;
+
+    case TMUX_PANE_RIGHT:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LCTL(SS_TAP(X_B)) SS_TAP(X_RIGHT));
+      }
+      return false;
+
+    case TMUX_PANE_DOWN:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LCTL(SS_TAP(X_B)) SS_TAP(X_DOWN));
+      }
+      return false;
+
+    case TMUX_PANE_LEFT:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LCTL(SS_TAP(X_B)) SS_TAP(X_LEFT));
+      }
+      return false;
+
+    case TMUX_RESIZE_UP:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LCTL(SS_TAP(X_B)) SS_LCTL(SS_TAP(X_UP)));
+      }
+      return false;
+
+    case TMUX_RESIZE_RIGHT:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LCTL(SS_TAP(X_B)) SS_LCTL(SS_TAP(X_RIGHT)));
+      }
+      return false;
+
+    case TMUX_RESIZE_DOWN:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LCTL(SS_TAP(X_B)) SS_LCTL(SS_TAP(X_DOWN)));
+      }
+      return false;
+
+    case TMUX_RESIZE_LEFT:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LCTL(SS_TAP(X_B)) SS_LCTL(SS_TAP(X_LEFT)));
       }
       return false;
 
@@ -260,14 +316,14 @@ const uint16_t PROGMEM combo13[] = {KC_M, KC_N, COMBO_END};
 
 // Tap dance
 enum {
-  TD_SHIFT__MOUSE_LAYER = 0 
+  TD_SHIFT__MOUSE_LAYER = 0
 };
 
 // Layers
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // Base layer QWERTY
   [0] = LAYOUT(
-    KC_Q, KC_W, KC_E, KC_R, KC_T,     KC_Y, KC_U, KC_I, KC_O, KC_P,
+    KC_Q, KC_W, KC_E, KC_R, LT(9, KC_T),     KC_Y, KC_U, KC_I, KC_O, KC_P,
     KC_A, KC_S, KC_D, KC_F, KC_G,     KC_H, KC_J, KC_K, KC_L, KC_SCLN,
     KC_Z, KC_X, KC_C, KC_V, KC_B,     KC_N, KC_M, KC_COMM, KC_DOT, KC_SLSH,
     LT(2, KC_ESC), LCTL_T(KC_SPC),    TD(TD_SHIFT__MOUSE_LAYER), MO(3)
@@ -283,9 +339,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   // Numbers layer
   [2] = LAYOUT(
-    KC_PSLS, KC_PAST, KC_PMNS, KC_PPLS, KC_COMM,     KC_COMM, KC_7, KC_8, KC_9, KC_0,
+    KC_PSLS, KC_PAST, KC_PMNS, KC_PPLS, KC_COMM,     KC_NO, KC_7, KC_8, KC_9, KC_0,
     KC_LALT, KC_GRV, KC_TAB, KC_LCTL,  KC_BSPC,      KC_PEQL, KC_4, KC_5, KC_6, KC_SCLN,
-    KC_NO, TMUX_CYCLE_PANE, TMUX_NEW, TMUX_SPLIT_H, TMUX_SPLIT_V,       TMUX_NEXT, KC_1, KC_2, KC_3, KC_DOT,
+    KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,               KC_COMM, KC_1, KC_2, KC_3, KC_DOT,
     KC_TRNS, KC_SPC,                                 MO(3), MO(4)
   ),
 
@@ -297,20 +353,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     MO(5), KC_SPC,                                      KC_TRNS, KC_TRNS
   ),
 
-  // Arrow keys layer 
+  // Arrow keys layer
   [4] = LAYOUT(
     KC_NO, KC_NO, KC_PGUP, KC_PGDN, KC_NO,     KC_NO, KC_HOME, KC_END, KC_NO, KC_NO,
     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,         KC_LEFT, KC_DOWN, KC_UP, KC_RGHT, US_CCED,
     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,         KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
-    KC_LSFT, KC_LCTL,                          KC_NO, KC_TRNS 
+    KC_LSFT, KC_LCTL,                          KC_NO, KC_TRNS
   ),
 
-  // Media and F1 ~ F12 keys 
+  // Media and F1 ~ F12 keys
   [5] = LAYOUT(
     DF(0), KC_VOLD, KC_MUTE, KC_VOLU, KC_NO,     KC_NO, KC_F9, KC_F10, KC_F11, KC_F12,
     DF(1), KC_MPRV, KC_MPLY, KC_MNXT, KC_NO,     KC_NO, KC_F5, KC_F6, KC_F7, KC_F8,
     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,           KC_NO, KC_F1, KC_F2, KC_F3, KC_F4,
-    KC_TRNS, KC_NO,                              KC_NO, KC_NO 
+    KC_TRNS, KC_NO,                              KC_NO, KC_NO
   ),
 
   // Mouse keys and bootloader mode
@@ -329,7 +385,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     TG(7), MO(8),                          KC_NO, KC_NO
   ),
 
-  // DWM alternative layer 
+  // DWM alternative layer
   [8] = LAYOUT(
     DWM_QUIT, KC_NO, KC_NO, KC_NO, KC_NO,     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,        KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
@@ -337,8 +393,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_NO, KC_NO,                             KC_NO, KC_NO
   ),
 
-  // Unused empty definition
+  // Tmux layer
   [9] = LAYOUT(
+    KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,     TMUX_RESIZE_LEFT, TMUX_RESIZE_DOWN, TMUX_RESIZE_UP, TMUX_RESIZE_RIGHT, TMUX_SPLIT_V,
+    KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,     TMUX_PANE_LEFT, TMUX_PANE_DOWN, TMUX_PANE_UP, TMUX_PANE_RIGHT, TMUX_SPLIT_H,
+    KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,     KC_NO, TMUX_PREV_WIN, TMUX_NEXT_WIN, KC_NO, KC_NO,
+    KC_NO, KC_NO,                          TMUX_NEW, KC_NO
+  ),
+
+  // Unused empty definition
+  [10] = LAYOUT(
     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
@@ -355,12 +419,6 @@ combo_t key_combos[COMBO_COUNT] = {
   COMBO(combo5, KC_LEAD),
   COMBO(combo6, TG(7)),
   COMBO(combo7,	KC_BSPC),
-  COMBO(combo8, KC_TAB),
-  COMBO(combo9, KC_ENT),
-  COMBO(combo10, KC_BSLS),
-  COMBO(combo11, KC_LEAD),
-  COMBO(combo12, TG(7)),
-  COMBO(combo13,	KC_BSPC),
 };
 
 

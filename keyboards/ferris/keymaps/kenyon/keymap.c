@@ -305,15 +305,6 @@ const uint16_t PROGMEM combo5[] = {KC_D, KC_F, COMBO_END};
 const uint16_t PROGMEM combo6[] = {KC_C, KC_V, COMBO_END};
 const uint16_t PROGMEM combo7[] = {KC_H, KC_J, COMBO_END};
 
-// Combos for Colemak-DH
-const uint16_t PROGMEM combo8[] = {KC_N, KC_E, COMBO_END};
-const uint16_t PROGMEM combo9[] = {KC_E, KC_I, COMBO_END};
-const uint16_t PROGMEM combo10[] = {KC_H, KC_COMM, COMBO_END};
-const uint16_t PROGMEM combo11[] = {KC_S, KC_T, COMBO_END};
-const uint16_t PROGMEM combo12[] = {KC_C, KC_D, COMBO_END};
-const uint16_t PROGMEM combo13[] = {KC_M, KC_N, COMBO_END};
-
-
 // Tap dance
 enum {
   TD_SHIFT__MOUSE_LAYER = 0

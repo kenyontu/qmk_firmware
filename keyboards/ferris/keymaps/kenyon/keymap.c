@@ -49,6 +49,15 @@ enum my_keycodes {
   WWW_PREV_TAB,
 };
 
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+  switch (keycode) {
+    case KC_T:
+      return TAPPING_TERM + 800;
+    default:
+      return TAPPING_TERM;
+  }
+}
+
 /*
 * SEND_STRING modifiers
 *

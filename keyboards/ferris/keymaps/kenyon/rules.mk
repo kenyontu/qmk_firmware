@@ -21,5 +21,4 @@ SPLIT_KEYBOARD = yes        # Use shared split_common code
 LEADER_ENABLE = yes
 SEND_STRING_ENABLE = yes
 COMBO_ENABLE = yes
-TAP_DANCE_ENABLE = yes
 LAYOUTS = split_3x5_2

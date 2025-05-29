@@ -53,6 +53,7 @@ enum my_keycodes {
   TMUX_RESIZE_DOWN, // Resize pane down
   TMUX_RESIZE_LEFT, // Resize pane left
   TMUX_ZOOM, // Expand current pane
+  TMUX_COPY_MODE, // Enter copy mode
 
   // Browser
   WWW_OPEN_TAB,
@@ -378,6 +379,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       return false;
 
 
+    case TMUX_COPY_MODE:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LCTL(SS_TAP(X_B)) "[");
+      }
+      return false;
+
+
     //////////////////////////////////////////////
     // Browser
     //////////////////////////////////////////////
@@ -489,7 +497,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [9] = LAYOUT(
     KC_NO,     KC_NO, KC_NO, KC_NO, KC_NO,     TMUX_RESIZE_LEFT, TMUX_RESIZE_DOWN, TMUX_RESIZE_UP, TMUX_RESIZE_RIGHT, TMUX_SPLIT_V,
     KC_NO,     KC_NO, KC_NO, KC_NO, KC_NO,     TMUX_PANE_LEFT, TMUX_PANE_DOWN, TMUX_PANE_UP, TMUX_PANE_RIGHT, TMUX_SPLIT_H,
-    TMUX_ZOOM, KC_NO, KC_NO, KC_NO, KC_NO,     KC_NO, TMUX_PREV_WIN, TMUX_NEXT_WIN, KC_NO, KC_NO,
+    TMUX_ZOOM, KC_NO, KC_NO, KC_NO, KC_NO,     KC_NO, TMUX_PREV_WIN, TMUX_NEXT_WIN, KC_NO, TMUX_COPY_MODE,
     KC_NO, TMUX_NEW,                       KC_NO, KC_NO
   ),
 
